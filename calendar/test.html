@@ -1,0 +1,69 @@
+<!doctype html>
+
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"><![endif]-->
+<!--[if (gt IE 6)|!(IE)]><!--><html lang="en" class="no-js"><!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="stylesheet" href="datePicker.css">
+	
+	<!--js lib{-->
+	<script src="../jquery.js"></script>
+	<script src="date.js"></script>
+	<script src="jquery.datePicker.js"></script>
+	
+	<!--}js lib-->
+
+</head>
+<body>
+<input name="date" class="J_datepicker" value="" />
+<script>
+Date.format = 'yyyy-mm-dd';
+var calendar = $('.J_datepicker')
+
+calendar.datePicker({
+	closeOnSelect: false,
+	selectMultiple: true
+});
+
+calendar.dpSetRenderCallback(function($td, thisDate, month, year){
+	
+	if (thisDate.isWeekend() && !$td.next().length) {
+		
+		$td.parent().append('<td><input type="checkbox" class="select-week" name="" value="" /></td>')
+	}
+	$('.select-week').unbind('click');
+	$('.select-week').bind('click', function(e){
+		var el = e.currentTarget;
+		if($(el).is(':checked')){
+			var tds = $(el).parent().prevAll();
+			tds.addClass('selected');
+			tds.each(function(i, item){
+				console.log($(item).data())
+				calendar.dpSetSelected($(item).data().datePickerDate)
+			})
+			//console.log(calendar.displayedYear)
+			//calendar.setSelected()
+			//calendar.trigger('dateSelected')
+		}else{
+			$(el).parent().prevAll().removeClass('selected')
+		}
+	})
+	
+});
+
+calendar.bind('dateSelected', function(e, selectedDate, $td){
+	console.log(selectedDate)
+})
+
+
+
+
+</script>
+</body>
+</html>
+
